@@ -15,16 +15,18 @@ fetch('https://fakestoreapi.com/products').then(res=>res.json()).then(json=>{
 document.querySelector('#searchInput').addEventListener('keyup', ()=> {
     let searchTerm = document.querySelector('#searchInput').value;
     let resultsArray = [];
-    resultsArray = data.filter(product=> String(product.title).includes(searchTerm))
-    renederProducts(resultsArray);
+    if(String(searchTerm).trim().length > 0) {
+      resultsArray = data.filter(product=> String(product.title).includes(searchTerm))
+      renederProducts(resultsArray);
+    } else {
+      removeElements();
+    } 
 })
 
 //Step three, Rendering the products which means remove the current the products in the results and get the searched element
 
 function renederProducts(products){
-    document.querySelectorAll('.result').forEach(prod => {
-        prod.remove();
-    })
+   removeElements();
     products.forEach(product=> {
         renderSingleProduct(product);
     })
@@ -46,9 +48,16 @@ function renderSingleProduct(product){
     resultDiv.appendChild(resultTitle);
     resultDiv.appendChild(resultPrice);
     resultDiv.appendChild(purchaseButton);
+    resultDiv.className = 'result';
 
     resultsRootElement.appendChild(resultDiv)
     
+}
+
+function removeElements(){
+  document.querySelectorAll('.result').forEach(prod => {
+    prod.remove()
+  })
 }
 
 
